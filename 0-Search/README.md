@@ -6,7 +6,7 @@
     <br>
     <main class="col-md" style="margin-bottom: 564px; margin-top: 82px;">
 
-                    <a data-id="" id="degrees" style="top: -82px;"></a><h1><a data-id="" href="#degrees">Degrees</a></h1>
+<a data-id="" id="degrees" style="top: -82px;"></a><h1><a data-id="" href="#degrees">Degrees</a></h1>
 
 <p>Write a program that determines how many “degrees of separation” apart two actors are.</p>
 
