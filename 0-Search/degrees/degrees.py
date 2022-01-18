@@ -1,4 +1,5 @@
 import csv
+from multiprocessing import parent_process
 import sys
 
 from util import Node, StackFrontier, QueueFrontier
@@ -92,8 +93,53 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    raise NotImplementedError
+    #keep track of number of states explored
+    num_explored = 0
+
+    #initialize frontier to just the starting position
+    start = Node(state=source, parent=None, action=None)
+    frontier = StackFrontier()
+    frontier.add(start)
+
+    #initialize a empty explored set
+    explored = set()
+
+    #keep loading until solution found
+    while True:
+        #if nothong left in frontier, then no path
+        if frontier.empty():
+            raise Exception("no solution")
+
+        #choose a node from the frontier
+        node = frontier.remove()
+        num_explored += 1
+
+        #if node is the goal, then we have a solution
+        if node.state == target:
+            actions = []
+            cells = []
+            while node.parent is not None:
+                actions.append(node.action)
+                cells.append(node.state)
+                node = node.parent
+            actions.reverse()
+            cells.reverse()
+            solution = []
+            for i in range(len(actions)):
+                solution.append((actions[i], cells[i]))
+            return solution
+
+        #mark node as explored
+        explored.add(node.state)
+
+        #add neighborse to frontier
+        for action, state in neighbors_for_person(node.state):
+            if action == None or state == None:
+                return None
+            elif not frontier.contains_state(state) and state not in explored:
+                child = Node(state=state, parent=node, action=action)
+                frontier.add(child)
+
 
 
 def person_id_for_name(name):
