@@ -4,6 +4,10 @@ Tic Tac Toe Player
 
 import math
 import copy
+from queue import Empty
+from tkinter.messagebox import NO
+from tkinter.tix import Tree
+from turtle import RawTurtle
 
 X = "X"
 O = "O"
@@ -123,7 +127,15 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+
+    if winner(board) != None :
+        return True
+
+    for row in board:
+        for cell in row:
+            if cell == Empty:
+                return False
+    return True
 
 
 def utility(board):
