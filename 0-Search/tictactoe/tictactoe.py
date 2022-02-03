@@ -142,7 +142,13 @@ def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    w = winner(board)
+    if w == X:
+        return 1
+    elif w == O:
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
