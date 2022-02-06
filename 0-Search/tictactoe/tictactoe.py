@@ -4,10 +4,9 @@ Tic Tac Toe Player
 
 import math
 import copy
-from queue import Empty
-from tkinter.messagebox import NO
-from tkinter.tix import Tree
-from turtle import RawTurtle
+
+
+from numpy import empty
 
 X = "X"
 O = "O"
@@ -27,21 +26,20 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    numX=0
-    numO=0
+    numX, numO = 0, 0
     for row in board:
         for cell in row:
             if cell == X:
-                numX+=1
+                numX += 1
             elif cell == O:
-                numO +=1
+                numO += 1
             
-        if numX > numO:
-            return O
-        elif not terminal(board) and numX == numO:
-            return X
-        else:
-            return None
+    if numX > numO:
+        return O
+    elif not terminal(board) and numX == numO:
+        return X
+    else:
+        return None
 
 
 def actions(board):
@@ -55,7 +53,7 @@ def actions(board):
         for j in range(3):
             if board[i][j] == EMPTY:
                 result.add((i,j))
-        return result
+    return result
 
 
 def result(board, action):
@@ -133,7 +131,7 @@ def terminal(board):
 
     for row in board:
         for cell in row:
-            if cell == Empty:
+            if cell == EMPTY:
                 return False
     return True
 
@@ -155,4 +153,47 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    p = player(board)
+
+    if board == [[empty]*3]*3:
+        return (0,0)
+    
+    if p == X:
+        v = float("-inf")
+        select_action = None
+        for action in actions(board):
+            MinValueResult = MinValue(result(board,action))
+            if MinValueResult > v:
+                v = MinValueResult
+                select_action = action
+
+
+    elif p == O:
+        v = float("inf")
+        select_action = None
+        for action in actions(board):
+            MaxValueResult = MaxValue(result(board,action))
+            if MaxValueResult < v:
+                v = MaxValueResult
+                select_action = action
+
+    return select_action
+
+
+def MaxValue(board):
+    if terminal(board):
+        return utility(board)
+    v = float("-inf")
+    for action in actions(board):
+        v = max(v,MinValue(result(board,action)))
+
+    return v
+
+def MinValue(board):
+    if terminal(board):
+        return utility(board)
+    v = float("inf")
+    for action in actions(board):
+        v = min(v,MaxValue(result(board,action)))
+
+    return v
